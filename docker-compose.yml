@@ -1,0 +1,26 @@
+services:
+  api:
+    image: node:latest
+    ports:
+      - "${API_PORT:-5002}:5002"
+    volumes:
+      - ./api:/api
+    networks:
+      - default
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    networks:
+      - default
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+networks:
+  default:
+    driver: bridge

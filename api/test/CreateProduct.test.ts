@@ -67,6 +67,7 @@ test('Should delete an existing product', async function () {
     const productRepositoryMemory = new ProductRepositoryMemory();
     const createProduct = new CreateProduct(productRepositoryMemory);
     const deleteProduct = new DeleteProduct(productRepositoryMemory);
+    const getProduct = new GetProduct(productRepositoryMemory);
 
     const createdOutput = await createProduct.execute({
         name: 'Armário',
@@ -75,6 +76,8 @@ test('Should delete an existing product', async function () {
     });
 
     await expect(() => deleteProduct.execute({id: createdOutput.id})).not.toThrow(Error);
+    await expect(() => getProduct.execute({id: createdOutput.id})).rejects.toThrow(Error);
+    await expect(() => getProduct.execute({id: createdOutput.id})).rejects.toThrow('Product not found');
 });
 
 test('Should throw an error exception when trying to delete a non-existent product', async function () {

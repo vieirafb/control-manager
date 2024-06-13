@@ -43,4 +43,11 @@ export default class ProductRepositoryMemory implements ProductRepository {
         if (!product) throw new Error('Product not found');
         return Promise.resolve(product);
     }
+
+    delete(id: string): Promise<void> {
+        const index = this.products.findIndex(product => product.id === id);
+        if (index === -1) throw new Error('Product not found');
+        this.products.splice(index, 1);
+        return Promise.resolve();
+    }
 }

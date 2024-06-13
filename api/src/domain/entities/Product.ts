@@ -1,5 +1,5 @@
 export default class Product {
-    readonly id?: string;
+    readonly id: string;
     private _name: string;
     private _type: string;
     private _price: number;
@@ -16,7 +16,7 @@ export default class Product {
         createdAt?: Date,
         updatedAt?: Date,
     ) {
-        this.id = id;
+        this.id = id || '';
         this._name = name;
         this._type = type;
         this._price = price;

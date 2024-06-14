@@ -10,7 +10,7 @@ export default class ProductRepositoryMemory implements ProductRepository {
             product.type,
             product.price,
             product.stock,
-            '1',
+            String(this.products.length + 1),
             new Date(),
             new Date(),
         );

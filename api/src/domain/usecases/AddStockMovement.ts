@@ -3,7 +3,7 @@ import StockMovement from "../entities/StockMovement";
 import StockMovementType from "../vos/StockMovementType";
 import StockMovementRepository from "../repositories/StockMovementRepository";
 
-export default class StockEntry {
+export default class AddStockMovement {
     constructor(
         readonly stockMovementRepository: StockMovementRepository,
         readonly productRepository: ProductRepository,

@@ -54,4 +54,9 @@ export default class ProductRepositoryMemory implements ProductRepository {
         this.products.splice(index, 1);
         return Promise.resolve();
     }
+
+    exists(id: string): Promise<boolean> {
+        const product = this.products.find(product => product.id === id);
+        return Promise.resolve(!!product);
+    }
 }

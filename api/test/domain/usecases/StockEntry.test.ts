@@ -1,7 +1,7 @@
-import StockMovementRepositoryMemory from "../src/infra/repositories/memory/StockMovementRepositoryMemory";
-import ProductRepositoryMemory from "../src/infra/repositories/memory/ProductRepositoryMemory";
-import AddStockMovement from "../src/domain/usecases/AddStockMovement";
-import CreateProduct from "../src/domain/usecases/CreateProduct";
+import StockMovementRepositoryMemory from "../../../src/infra/repositories/memory/StockMovementRepositoryMemory";
+import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import AddStockMovement from "../../../src/domain/usecases/AddStockMovement";
+import CreateProduct from "../../../src/domain/usecases/CreateProduct";
 
 test('Should save a new stock entry', async function () {
     const stockMovementRepositoryMemory = new StockMovementRepositoryMemory();

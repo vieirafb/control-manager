@@ -1,5 +1,5 @@
-import ProductRepositoryMemory from "../src/infra/repositories/memory/ProductRepositoryMemory";
-import CreateProduct from "../src/domain/usecases/CreateProduct";
+import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import CreateProduct from "../../../src/domain/usecases/CreateProduct";
 
 test('Should save a new product', async function () {
     const productRepositoryMemory = new ProductRepositoryMemory();

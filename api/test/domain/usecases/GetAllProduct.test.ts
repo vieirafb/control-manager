@@ -1,6 +1,6 @@
-import ProductRepositoryMemory from "../src/infra/repositories/memory/ProductRepositoryMemory";
-import CreateProduct from "../src/domain/usecases/CreateProduct";
-import GetAllProduct from "../src/domain/usecases/GetAllProduct";
+import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import CreateProduct from "../../../src/domain/usecases/CreateProduct";
+import GetAllProduct from "../../../src/domain/usecases/GetAllProduct";
 
 test('Should recover all existing products', async function () {
     const productRepositoryMemory = new ProductRepositoryMemory();

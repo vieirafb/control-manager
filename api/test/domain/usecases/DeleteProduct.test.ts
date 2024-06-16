@@ -1,7 +1,7 @@
-import ProductRepositoryMemory from "../src/infra/repositories/memory/ProductRepositoryMemory";
-import CreateProduct from "../src/domain/usecases/CreateProduct";
-import DeleteProduct from "../src/domain/usecases/DeleteProduct";
-import GetProduct from "../src/domain/usecases/GetProduct";
+import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import CreateProduct from "../../../src/domain/usecases/CreateProduct";
+import DeleteProduct from "../../../src/domain/usecases/DeleteProduct";
+import GetProduct from "../../../src/domain/usecases/GetProduct";
 
 test('Should delete an existing product', async function () {
     const productRepositoryMemory = new ProductRepositoryMemory();

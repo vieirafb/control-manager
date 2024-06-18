@@ -20,8 +20,8 @@ export default class UpdateProduct {
             type: savedProduct.type,
             price: savedProduct.price,
             stock: savedProduct.stock,
-            createdAt: savedProduct.createdAt?.toLocaleString(),
-            updatedAt: savedProduct.updatedAt?.toLocaleString(),
+            createdAt: savedProduct.createdAt?.toISOString(),
+            updatedAt: savedProduct.updatedAt?.toISOString(),
         };
     }
 }

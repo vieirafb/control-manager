@@ -14,8 +14,8 @@ export default class GetAllProduct {
             type: product.type,
             price: product.price,
             stock: product.stock,
-            createdAt: product.createdAt?.toLocaleString(),
-            updatedAt: product.updatedAt?.toLocaleString(),
+            createdAt: product.createdAt?.toISOString(),
+            updatedAt: product.updatedAt?.toISOString(),
         }));
     }
 }

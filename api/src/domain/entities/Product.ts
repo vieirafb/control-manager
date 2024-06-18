@@ -3,7 +3,7 @@ export default class Product {
     private _name: string;
     private _type: string;
     private _price: number;
-    private _stock: number;
+    readonly stock: number;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
 
@@ -20,7 +20,7 @@ export default class Product {
         this._name = name;
         this._type = type;
         this._price = price;
-        this._stock = stock || 0;
+        this.stock = stock || 0;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -50,14 +50,5 @@ export default class Product {
     set type(type: string) {
         if (type.trim().length < 1) throw new Error("Invalid type");
         this._type = type;
-    }
-
-    get stock(): number {
-        return this._stock;
-    }
-
-    set stock(stock: number) {
-        if (stock < 0) throw new Error("Stock cannot be less than 0");
-        this._stock = stock;
     }
 }

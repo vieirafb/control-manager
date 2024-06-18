@@ -1,15 +1,30 @@
-import StockMovementRepositoryMemory from "../../../src/infra/repositories/memory/StockMovementRepositoryMemory";
-import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import StockMovementRepositoryMongoose from "../../../src/infra/repositories/mongoose/StockMovementRepositoryMongoose";
+import ProductRepositoryMongoose from "../../../src/infra/repositories/mongoose/ProductRepositoryMongoose";
 import AddStockMovement from "../../../src/domain/usecases/AddStockMovement";
 import CreateProduct from "../../../src/domain/usecases/CreateProduct";
+import connection from "../../../src/infra/databases/connection";
+import mongoose from "mongoose";
+
+beforeAll(async () => {
+    await connection();
+});
+
+beforeEach(async () => {
+    await mongoose.model('Product').deleteMany();
+    await mongoose.model('StockMovement').deleteMany();
+});
+
+afterAll(async () => {
+    await mongoose.connection.close();
+});
 
 test('Should save a new stock entry', async function () {
-    const stockMovementRepositoryMemory = new StockMovementRepositoryMemory();
-    const productRepositoryMemory = new ProductRepositoryMemory();
-    const createProduct = new CreateProduct(productRepositoryMemory);
-    const addStockMovement = new AddStockMovement(stockMovementRepositoryMemory, productRepositoryMemory);
+    const stockMovementRepositoryMongoose = new StockMovementRepositoryMongoose();
+    const productRepositoryMongoose = new ProductRepositoryMongoose();
+    const createProduct = new CreateProduct(productRepositoryMongoose);
+    const addStockMovement = new AddStockMovement(stockMovementRepositoryMongoose, productRepositoryMongoose);
 
-    const product = await createProduct.execute({
+    const productCreated = await createProduct.execute({
         name: 'Armário',
         type: 'Móvel',
         price: 255.99,
@@ -17,7 +32,7 @@ test('Should save a new stock entry', async function () {
 
     const date = (new Date()).toISOString();
     const addStockMovementOutput = await addStockMovement.execute({
-        productId: product.id,
+        productId: productCreated.id,
         movementType: 'inflow',
         quantity: 2,
         entryDatetime: date,
@@ -32,13 +47,14 @@ test('Should save a new stock entry', async function () {
 });
 
 test('Should throw an error exception when trying to save stock of a non-existent product', async function () {
-    const stockMovementRepositoryMemory = new StockMovementRepositoryMemory();
-    const productRepositoryMemory = new ProductRepositoryMemory();
-    const addStockMovement = new AddStockMovement(stockMovementRepositoryMemory, productRepositoryMemory);
+    const stockMovementRepositoryMongoose = new StockMovementRepositoryMongoose();
+    const productRepositoryMongoose = new ProductRepositoryMongoose();
+    const addStockMovement = new AddStockMovement(stockMovementRepositoryMongoose, productRepositoryMongoose);
+    const id = new mongoose.Types.ObjectId();
 
     const stockEntryExecute = () =>
         addStockMovement.execute({
-            productId: '1',
+            productId: id.toString(),
             movementType: 'inflow',
             quantity: 2,
             entryDatetime: (new Date()).toISOString(),

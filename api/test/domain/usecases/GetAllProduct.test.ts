@@ -1,11 +1,25 @@
-import ProductRepositoryMemory from "../../../src/infra/repositories/memory/ProductRepositoryMemory";
+import ProductRepositoryMongoose from "../../../src/infra/repositories/mongoose/ProductRepositoryMongoose";
 import CreateProduct from "../../../src/domain/usecases/CreateProduct";
 import GetAllProduct from "../../../src/domain/usecases/GetAllProduct";
+import connection from "../../../src/infra/databases/connection";
+import mongoose from "mongoose";
+
+beforeAll(async () => {
+    await connection();
+});
+
+beforeEach(async () => {
+    await mongoose.model('Product').deleteMany();
+});
+
+afterAll(async () => {
+    await mongoose.connection.close();
+});
 
 test('Should recover all existing products', async function () {
-    const productRepositoryMemory = new ProductRepositoryMemory();
-    const createProduct = new CreateProduct(productRepositoryMemory);
-    const getAllProduct = new GetAllProduct(productRepositoryMemory);
+    const productRepositoryMongoose = new ProductRepositoryMongoose();
+    const createProduct = new CreateProduct(productRepositoryMongoose);
+    const getAllProduct = new GetAllProduct(productRepositoryMongoose);
 
     const output1 = await createProduct.execute({
         name: 'Armário',

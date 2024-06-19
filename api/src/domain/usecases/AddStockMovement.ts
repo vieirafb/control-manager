@@ -2,6 +2,7 @@ import ProductRepository from "../repositories/ProductRepository";
 import StockMovement from "../entities/StockMovement";
 import StockMovementType from "../vos/StockMovementType";
 import StockMovementRepository from "../repositories/StockMovementRepository";
+import NotFoundError from "../../errors/NotFoundError";
 
 export default class AddStockMovement {
     constructor(
@@ -11,7 +12,7 @@ export default class AddStockMovement {
 
     async execute(input: StockEntryInput) {
         const productExists = await this.productRepository.exists(input.productId);
-        if (!productExists) throw new Error('Product does not exist');
+        if (!productExists) throw new NotFoundError('Product does not exist');
 
         const movementType = new StockMovementType(input.movementType);
         const entryDatetime = new Date(input.entryDatetime);

@@ -1,10 +1,12 @@
+import DomainError from "../../errors/DomainError";
+
 export default class StockMovementType {
     static readonly INFLOW: string = 'inflow';
     static readonly OUTFLOW: string = 'outflow';
     readonly value: string;
 
     constructor(value: string) {
-        if (!this.exists(value)) throw new Error('Invalid inventory movement type');
+        if (!this.exists(value)) throw new DomainError('Invalid inventory movement type');
         this.value = value;
     }
 

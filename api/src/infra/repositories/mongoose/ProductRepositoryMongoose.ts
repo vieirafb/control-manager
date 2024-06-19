@@ -1,6 +1,7 @@
 import ProductRepository from "../../../domain/repositories/ProductRepository";
 import ProductEntity from "../../../domain/entities/Product";
 import ProductsModel from "../../models/Product";
+import NotFoundError from "../../../errors/NotFoundError";
 
 
 export default class ProductRepositoryMongoose implements ProductRepository {
@@ -29,7 +30,7 @@ export default class ProductRepositoryMongoose implements ProductRepository {
             price: product.price,
         }, {new: true});
 
-        if (!response) throw new Error('Product not found');
+        if (!response) throw new NotFoundError('Product not found');
 
         return new ProductEntity(
             response.name,
@@ -45,7 +46,7 @@ export default class ProductRepositoryMongoose implements ProductRepository {
     async get(id: string): Promise<ProductEntity> {
         const response = await ProductsModel.findById(id).exec();
 
-        if (!response) throw new Error('Product not found');
+        if (!response) throw new NotFoundError('Product not found');
 
         return new ProductEntity(
             response.name,
@@ -79,7 +80,7 @@ export default class ProductRepositoryMongoose implements ProductRepository {
 
     async delete(id: string): Promise<void> {
         const response = await ProductsModel.findByIdAndDelete(id).exec();
-        if (!response) throw new Error('Product not found');
+        if (!response) throw new NotFoundError('Product not found');
     }
 
     async exists(id: string): Promise<boolean> {

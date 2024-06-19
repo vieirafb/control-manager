@@ -4,6 +4,7 @@ import AddStockMovement from "../../../src/domain/usecases/AddStockMovement";
 import CreateProduct from "../../../src/domain/usecases/CreateProduct";
 import connection from "../../../src/infra/databases/connection";
 import mongoose from "mongoose";
+import NotFoundError from "../../../src/errors/NotFoundError";
 
 beforeAll(async () => {
     await connection();
@@ -61,6 +62,6 @@ test('Should throw an error exception when trying to save stock of a non-existen
             comments: 'Produto da China',
         });
 
-    await expect(stockEntryExecute).rejects.toThrow(Error);
+    await expect(stockEntryExecute).rejects.toThrow(NotFoundError);
     await expect(stockEntryExecute).rejects.toThrow('Product does not exist');
 });

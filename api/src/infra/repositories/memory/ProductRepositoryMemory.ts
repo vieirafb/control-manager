@@ -1,5 +1,6 @@
 import ProductRepository from "../../../domain/repositories/ProductRepository";
 import Product from "../../../domain/entities/Product";
+import NotFoundError from "../../../errors/NotFoundError";
 
 export default class ProductRepositoryMemory implements ProductRepository {
     products: Product[] = [];
@@ -22,7 +23,7 @@ export default class ProductRepositoryMemory implements ProductRepository {
     update(product: Product): Promise<Product> {
         const found = this.products.find(thisProduct => thisProduct.id === product.id);
 
-        if (!found) throw new Error('Product not found');
+        if (!found) throw new NotFoundError('Product not found');
 
         const savedProduct = new Product(
             found.name,
@@ -40,7 +41,7 @@ export default class ProductRepositoryMemory implements ProductRepository {
 
     get(id: string): Promise<Product> {
         const product = this.products.find(product => product.id === id);
-        if (!product) throw new Error('Product not found');
+        if (!product) throw new NotFoundError('Product not found');
         return Promise.resolve(product);
     }
 
@@ -50,7 +51,7 @@ export default class ProductRepositoryMemory implements ProductRepository {
 
     delete(id: string): Promise<void> {
         const index = this.products.findIndex(product => product.id === id);
-        if (index === -1) throw new Error('Product not found');
+        if (index === -1) throw new NotFoundError('Product not found');
         this.products.splice(index, 1);
         return Promise.resolve();
     }

@@ -11,8 +11,7 @@ export default class ProductController {
     constructor(
         readonly productRepo: ProductRepository,
         readonly stockMovementRepo: StockMovementRepository,
-    ) {
-    }
+    ) {}
 
     async index() {
         const getAllProduct = new GetAllProduct(this.productRepo);
@@ -22,9 +21,7 @@ export default class ProductController {
                     message: 'Success',
                     data: data,
                 }, status: 200,
-            })).catch(error => ({
-                response: {message: error.message}, status: 400
-            }));
+            })).catch(error => ({error: error}))
     }
 
     async show(params: any) {
@@ -36,9 +33,7 @@ export default class ProductController {
                     message: 'Success',
                     data: data,
                 }, status: 200,
-            })).catch(error => ({
-                response: {message: error.message}, status: 400
-            }));
+            })).catch(error => ({error: error}))
     }
 
     async store(params: any, body: any) {
@@ -53,9 +48,7 @@ export default class ProductController {
                 message: 'Success',
                 data: data,
             }, status: 200,
-        })).catch(error => ({
-            response: {message: error.message}, status: 400
-        }));
+        })).catch(error => ({error: error}))
     }
 
     async update(params: any, body: any) {
@@ -71,9 +64,7 @@ export default class ProductController {
                 message: 'Success',
                 data: data,
             }, status: 200,
-        })).catch(error => ({
-            response: {message: error.message}, status: 400
-        }));
+        })).catch(error => ({error: error}))
     }
 
     async destroy(params: any) {
@@ -81,7 +72,7 @@ export default class ProductController {
 
         return await deleteProduct.execute({id: params.id})
             .then(() => ({status: 204}))
-            .catch(error => ({response: {message: error.message}, status: 404}))
+            .catch(error => ({error: error}))
     }
 
     async addStockMovement(params: any, body: any) {
@@ -97,8 +88,6 @@ export default class ProductController {
             response: {
                 message: 'Success', data: data
             }, status: 201
-        })).catch(error => ({
-            response: {message: error.message}, status: 404
-        }))
+        })).catch(error => ({error: error}))
     }
 }

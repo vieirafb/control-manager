@@ -1,3 +1,5 @@
+import DomainError from "../../errors/DomainError";
+
 export default class Product {
     readonly id: string;
     private _name: string;
@@ -30,7 +32,7 @@ export default class Product {
     }
 
     set price(price: number) {
-        if (price < 0) throw new Error("Price cannot be less than 0");
+        if (price < 0) throw new DomainError("Price cannot be less than 0");
         this._price = price;
     }
 
@@ -39,7 +41,7 @@ export default class Product {
     }
 
     set name(name: string) {
-        if (name.trim().length < 1) throw new Error("Invalid name");
+        if (name.trim().length < 1) throw new DomainError("Invalid name");
         this._name = name;
     }
 
@@ -48,7 +50,7 @@ export default class Product {
     }
 
     set type(type: string) {
-        if (type.trim().length < 1) throw new Error("Invalid type");
+        if (type.trim().length < 1) throw new DomainError("Invalid type");
         this._type = type;
     }
 }

@@ -2,9 +2,14 @@ import StockMovementRepository from "../../../domain/repositories/StockMovementR
 import StockMovementEntity from "../../../domain/entities/StockMovement";
 import StockMovementModel from "../../models/StockMovement";
 import StockMovementType from "../../../domain/vos/StockMovementType";
+import Product from "../../models/Product";
 
 export default class StockMovementRepositoryMongoose implements StockMovementRepository {
     async save(stockMovement: StockMovementEntity): Promise<StockMovementEntity> {
+        const product = await Product.findById(stockMovement.productId).exec();
+
+        if (!product) throw new Error('Product not found');
+
         const movementCreated = await StockMovementModel.create({
             productId: stockMovement.productId,
             movementType: stockMovement.movementType.value,
@@ -12,6 +17,18 @@ export default class StockMovementRepositoryMongoose implements StockMovementRep
             entryDatetime: stockMovement.entryDatetime,
             comments: stockMovement.comments,
         });
+
+        switch(stockMovement.movementType.value) {
+            case StockMovementType.INFLOW:
+                product.stock += stockMovement.quantity;
+                break;
+
+            case StockMovementType.OUTFLOW:
+                product.stock -= stockMovement.quantity;
+                break;
+        }
+
+        product.save();
 
         return new StockMovementEntity(
             movementCreated.productId.toString(),

@@ -1,18 +1,19 @@
-export type ListQueryInput = {
-    page: number,
-    length: number,
-    search: string,
-    fields: Field[],
-    order: Order[],
+type ListQueryInput = {
+    offset?: number,
+    length?: number,
+    search?: {
+        value: string,
+        regex?: boolean
+    },
+    fields: {
+        data: string,
+        sortable?: boolean,
+        searchable?: boolean,
+    }[],
+    sort?: {
+        column: number,
+        direction?: string,
+    }[],
 };
 
-type Field = {
-    data: string,
-    sortable: boolean,
-    searchable: boolean,
-};
-
-type Order = {
-    column: string,
-    direction: string,
-};
+export default ListQueryInput;

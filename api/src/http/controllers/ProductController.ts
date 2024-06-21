@@ -6,6 +6,7 @@ import CreateProduct from "../../domain/usecases/CreateProduct";
 import UpdateProduct from "../../domain/usecases/UpdateProduct";
 import DeleteProduct from "../../domain/usecases/DeleteProduct";
 import AddStockMovement from "../../domain/usecases/AddStockMovement";
+import ListProductsQueryMongoose from "../../infra/queries/mongoose/ListProductsQueryMongoose";
 
 export default class ProductController {
     constructor(
@@ -89,5 +90,19 @@ export default class ProductController {
                 message: 'Success', data: data
             }, status: 201
         })).catch(error => ({error: error}))
+    }
+
+    async list(params: any, body: any) {
+
+        const listProductsQueryMongoose = new ListProductsQueryMongoose();
+        const data = await listProductsQueryMongoose.handle(body);
+
+        return {
+            response: {
+                message: "Success",
+                data: data,
+            },
+            status: 200,
+        };
     }
 }

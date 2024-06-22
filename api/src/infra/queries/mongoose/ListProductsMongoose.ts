@@ -1,11 +1,10 @@
-import ListProductsQuery from "../../../domain/queries/ListProductsQuery";
-import ListQueryInput from "../../../domain/queries/ListQueryInput";
-import Product from "../../models/Product";
+import ListQueryAbstract from "./ListQueryAbstract";
+import ListQueryInput from "../../../http/queries/ListQueryInput";
 import {Aggregate} from "mongoose";
+import Product from "../../models/Product";
 
-export default class ListProductsQueryMongoose implements ListProductsQuery {
-
-    private modelFields: ModelField[] = [
+export default class ListProductsMongoose extends ListQueryAbstract {
+    protected modelFields: ModelField[] = [
         {name: '_id', match: ['_id', 'id'], default: false},
         {name: 'name', match: ['name']},
         {name: 'type', match: ['type']},
@@ -15,12 +14,10 @@ export default class ListProductsQueryMongoose implements ListProductsQuery {
         {name: 'updatedAt', match: ['updatedAt']},
     ];
 
-    async handle(input: ListQueryInput): Promise<any> {
+    async build(input: ListQueryInput) {
         const aggregate: Aggregate<any> = Product.aggregate();
         const documentsTotal: any = await Product.aggregate().count('count');
         let documentsFiltered: any;
-
-        this.map(input);
 
         aggregate.project(this.project())
 
@@ -77,27 +74,6 @@ export default class ListProductsQueryMongoose implements ListProductsQuery {
         });
 
         if (Object.keys($sort).length > 0) return $sort;
-    }
-
-    private map(input: ListQueryInput): void {
-        this.modelFields.forEach(modelField => {
-            input.fields.forEach((field, key) => {
-                if (!modelField.match.includes(field.data)) return;
-
-                modelField.display = true;
-                modelField.options = {searchable: field.searchable === true || field.searchable === undefined};
-
-                if (input.sort) {
-                    for (const sort of input.sort) {
-                        if (sort.column !== key) continue;
-                        if (input.fields[key].sortable === false) continue;
-
-                        modelField.options.sortDirection =
-                            sort.direction === 'asc' || sort.direction === undefined ? 1 : -1;
-                    }
-                }
-            });
-        });
     }
 }
 

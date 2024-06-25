@@ -1,6 +1,8 @@
 services:
   api:
-    image: node:latest
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
     ports:
       - "${API_PORT:-5002}:5002"
     volumes:
@@ -20,6 +22,19 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+  spa:
+    build:
+      context: .
+      dockerfile: docker/spa.Dockerfile
+    ports:
+      - "${SPA_PORT:-4200}:4200"
+    volumes:
+      - ./spa:/spa
+    networks:
+      - default
+    depends_on:
+      - api
 
 networks:
   default:

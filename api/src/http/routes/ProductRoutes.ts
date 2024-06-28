@@ -4,16 +4,13 @@ import ExpressAdapter from "../../adapter/ExpressAdapter";
 import ProductRepositoryMongoose from "../../infra/repositories/mongoose/ProductRepositoryMongoose";
 import StockMovementRepositoryMongoose from "../../infra/repositories/mongoose/StockMovementRepositoryMongoose";
 import ProductRequest from "../middlewares/ProductRequest";
-import ListProductsMongoose from "../../infra/queries/mongoose/ListProductsMongoose";
 
 const productRepositoryMongoose = new ProductRepositoryMongoose();
 const stockMovementRepositoryMongoose = new StockMovementRepositoryMongoose();
-const listProductsMongoose = new ListProductsMongoose();
 
 const productController: ProductController = new ProductController(
     productRepositoryMongoose,
     stockMovementRepositoryMongoose,
-    listProductsMongoose,
 );
 
 const ProductRoutes = Router();

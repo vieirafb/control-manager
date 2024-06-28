@@ -6,13 +6,12 @@ import CreateProduct from "../../domain/usecases/CreateProduct";
 import UpdateProduct from "../../domain/usecases/UpdateProduct";
 import DeleteProduct from "../../domain/usecases/DeleteProduct";
 import AddStockMovement from "../../domain/usecases/AddStockMovement";
-import ListQueryInterface from "../queries/ListQueryInterface";
+import ListProductsMongoose from "../../infra/queries/mongoose/ListProductsMongoose";
 
 export default class ProductController {
     constructor(
         readonly productRepo: ProductRepository,
         readonly stockMovementRepo: StockMovementRepository,
-        readonly listProductsQuery: ListQueryInterface,
     ) {}
 
     async index() {
@@ -93,8 +92,9 @@ export default class ProductController {
         })).catch(error => ({error: error}))
     }
 
-    async list(params: any, body: any) {
-        const data = await this.listProductsQuery.handle(body);
+    async list(params: any, query: any) {
+        const listProductsQuery = new ListProductsMongoose()
+        const data = await listProductsQuery.handle(query);
 
         return {
             response: data,

@@ -57,8 +57,12 @@ export default class ListProductsMongoose extends ListQueryAbstract {
         const $project: { [key: string]: number } = {};
 
         this.modelFields.forEach(modelField => {
-            const display = modelField.display || modelField.default;
-            if (display) $project[modelField.name] = 1;
+            if (modelField.default !== undefined) {
+                $project[modelField.name] = Number(modelField.default)
+            }
+            if (modelField.display) {
+                $project[modelField.name] = 1
+            }
         });
 
         return $project;

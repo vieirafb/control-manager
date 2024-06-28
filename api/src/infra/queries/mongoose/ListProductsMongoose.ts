@@ -17,7 +17,7 @@ export default class ListProductsMongoose extends ListQueryAbstract {
     async build(input: ListQueryInput) {
         const aggregate: Aggregate<any> = Product.aggregate();
         const documentsTotal: any = await Product.aggregate().count('count');
-        let documentsFiltered: any;
+        let documentsFiltered: any = [];
 
         aggregate.project(this.project())
 

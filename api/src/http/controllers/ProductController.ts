@@ -97,10 +97,7 @@ export default class ProductController {
         const data = await this.listProductsQuery.handle(body);
 
         return {
-            response: {
-                message: "Success",
-                data: data,
-            },
+            response: data,
             status: 200,
         };
     }

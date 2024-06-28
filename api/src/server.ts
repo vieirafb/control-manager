@@ -2,11 +2,13 @@ import express from 'express';
 import Routes from "./http/routes";
 import connection from "./infra/databases/connection";
 import ErrorHandler from "./errors/ErrorHandler"
+import cors from "cors"
 
 connection();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(Routes);
 app.use(ErrorHandler);

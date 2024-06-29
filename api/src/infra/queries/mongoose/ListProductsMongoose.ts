@@ -32,8 +32,8 @@ export default class ListProductsMongoose extends ListQueryAbstract {
         }
 
         aggregate
-            .skip(input.offset || 0)
-            .limit(input.length || 50);
+            .skip(Number(input.offset) || 0)
+            .limit(Number(input.length) || 50);
 
         return {
             recordsTotal: documentsTotal[0] ? documentsTotal[0].count : 0,

@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ProductsService } from "../products.service";
 import { MatPaginatorModule, MatPaginator, PageEvent } from "@angular/material/paginator";
@@ -17,8 +17,9 @@ export class ProductsListComponent {
 
   displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock'];
   dataSource: any[] = [];
-  pageSizeOptions: number[] = [1];
-  pageSize: number = 1;
+  pageSizeOptions: number[] = [50];
+  pageSize: number = 50;
+  pageIndex: number = 0;
   length: number = 0;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -49,6 +50,33 @@ export class ProductsListComponent {
       length: event.pageSize,
       offset: event.pageIndex * event.pageSize
     }).subscribe(response => {
+      this.dataSource = response.data;
+      this.length = response.recordsTotal;
+      this.pageSize = event.pageSize;
+      this.pageIndex = event.pageIndex;
+    });
+  }
+
+  handleSortEvent(event: Sort) {
+    const columns = this.displayedColumns.map(column => ({
+      data: column,
+      sortable: true,
+      searchable: true,
+    }));
+    const sort: any[] = [];
+
+    if (event.direction) {
+      const index: number = this.displayedColumns.findIndex(value => event.active === value);
+      sort.push({ column: index, direction: event.direction });
+    }
+
+    this.productsService.list({
+      fields: columns,
+      length: this.pageSize,
+      offset: this.pageIndex * this.pageSize,
+      sort: sort,
+    }).subscribe(response => {
+      console.log(response.data);
       this.dataSource = response.data;
       this.length = response.recordsTotal;
     });

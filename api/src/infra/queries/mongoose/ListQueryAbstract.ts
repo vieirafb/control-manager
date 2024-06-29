@@ -17,15 +17,19 @@ export default abstract class ListQueryAbstract implements ListQueryInterface {
                 if (!modelField.match.includes(field.data)) return;
 
                 modelField.display = true;
-                modelField.options = {searchable: field.searchable === true || field.searchable === undefined};
+                modelField.options = { searchable: field.searchable === true || field.searchable === undefined };
 
                 if (input.sort) {
-                    for (const sort of input.sort) {
-                        if (sort.column !== key) continue;
+                    for (let i = 0; i < input.sort.length; i++) {
+                        const sort = input.sort[i];
+
+                        if (Number(sort.column) !== key) continue;
                         if (input.fields[key].sortable === false) continue;
 
-                        modelField.options.sortDirection =
-                            sort.direction === 'asc' || sort.direction === undefined ? 1 : -1;
+                        modelField.options.sort = {
+                            order: i,
+                            direction: sort.direction === 'asc' || sort.direction !== 'desc' ? 1 : -1,
+                        }
                     }
                 }
             });
@@ -33,13 +37,16 @@ export default abstract class ListQueryAbstract implements ListQueryInterface {
     }
 }
 
-type ModelField = {
+export type ModelField = {
     name: string,
     match: string[],
     default?: boolean,
     display?: true,
     options?: {
         searchable?: boolean,
-        sortDirection?: 1 | -1,
+        sort?: {
+            direction: 1 | -1,
+            order: number,
+        }
     },
 };

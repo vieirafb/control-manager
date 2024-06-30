@@ -7,18 +7,26 @@ import { MatPaginatorModule, MatPaginator, PageEvent } from "@angular/material/p
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from "@angular/forms";
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule, FormsModule],
+  imports: [
+    CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule, FormsModule,
+    MatIconModule, MatButtonModule
+  ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css'
 })
 export class ProductsListComponent implements AfterViewInit {
   productsService: ProductsService = inject(ProductsService);
+  router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
 
-  displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock'];
+  displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock', 'actions'];
   dataSource: any[] = [];
   pageSizeOptions: number[] = [10, 25, 50, 100];
   pageSize: number = 10;
@@ -66,5 +74,13 @@ export class ProductsListComponent implements AfterViewInit {
       this.dataSource = response.data;
       this.paginator.length = response.recordsTotal;
     });
+  }
+
+  onAdd() {
+    this.router.navigate(['new'], {relativeTo: this.route});
+  }
+
+  onEdit(id: string) {
+    this.router.navigate([`edit/${id}`], {relativeTo: this.route});
   }
 }

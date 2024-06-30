@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import ProductsRoutes from "./products/products.routes";
 
 export const routes: Routes = [
   {
@@ -8,7 +7,7 @@ export const routes: Routes = [
     redirectTo: 'products'
   },
   {
-    path: '',
-    loadChildren: () => ProductsRoutes
+    path: 'products',
+    loadChildren: () => import('./products/products.routes').then(m => m.ProductsRoutes)
   },
 ];

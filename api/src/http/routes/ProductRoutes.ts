@@ -15,7 +15,7 @@ const productController: ProductController = new ProductController(
 
 const ProductRoutes = Router();
 
-ProductRoutes.get('/product', ExpressAdapter(productController.list.bind(productController)));
+ProductRoutes.get('/product', ProductRequest.list, ExpressAdapter(productController.list.bind(productController)));
 ProductRoutes.get('/product/:id', ProductRequest.show, ExpressAdapter(productController.show.bind(productController)));
 ProductRoutes.post('/product', ProductRequest.store, ExpressAdapter(productController.store.bind(productController)));
 ProductRoutes.put('/product/:id', ProductRequest.update, ExpressAdapter(productController.update.bind(productController)));

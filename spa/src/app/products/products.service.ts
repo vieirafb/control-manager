@@ -38,7 +38,7 @@ export class ProductsService {
   }
 }
 
-type ListInput = {
+export type ListInput = {
   offset?: number,
   length?: number,
   search?: {
@@ -50,7 +50,7 @@ type ListInput = {
     sortable?: boolean,
     searchable?: boolean,
   }[],
-  sort?: {
+  sort: {
     column: number,
     direction?: 'asc' | 'desc',
   }[],

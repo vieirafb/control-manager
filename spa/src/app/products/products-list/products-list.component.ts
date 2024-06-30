@@ -1,8 +1,8 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { ProductsService } from "../products.service";
+import { ListInput, ProductsService } from "../products.service";
 import { MatPaginatorModule, MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -15,105 +15,56 @@ import { FormsModule } from "@angular/forms";
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css'
 })
-export class ProductsListComponent {
+export class ProductsListComponent implements AfterViewInit {
   productsService: ProductsService = inject(ProductsService);
 
   displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock'];
   dataSource: any[] = [];
-  pageSizeOptions: number[] = [50];
-  pageSize: number = 50;
-  pageIndex: number = 0;
-  length: number = 0;
-  columnActive = '';
-  columnDirection = '';
+  pageSizeOptions: number[] = [10, 25, 50, 100];
+  pageSize: number = 10;
+  filter: string = '';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() {
-    const columns = this.displayedColumns.map(column => ({
-      data: column,
-      sortable: true,
-      searchable: true,
-    }));
-
-    this.productsService.list({ fields: columns, length: this.pageSize }).subscribe(response => {
-      this.dataSource = response.data;
-      this.length = response.recordsTotal;
-    });
+  ngAfterViewInit() {
+    this.draw();
   }
 
   handlePageEvent(event: PageEvent) {
-    const columns = this.displayedColumns.map(column => ({
-      data: column,
-      sortable: true,
-      searchable: true,
-    }));
-
-    this.productsService.list({
-      fields: columns,
-      length: event.pageSize,
-      offset: event.pageIndex * event.pageSize
-    }).subscribe(response => {
-      this.dataSource = response.data;
-      this.length = response.recordsTotal;
-      this.pageSize = event.pageSize;
-      this.pageIndex = event.pageIndex;
-    });
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+    this.draw();
   }
 
   handleSortEvent(event: Sort) {
-    const columns = this.displayedColumns.map(column => ({
-      data: column,
-      sortable: true,
-      searchable: true,
-    }));
-    const sort: any[] = [];
-
-    if (event.direction) {
-      const index: number = this.displayedColumns.findIndex(value => event.active === value);
-      sort.push({ column: index, direction: event.direction });
-      this.columnActive = event.active;
-      this.columnDirection = event.direction;
-    }
-
-    this.productsService.list({
-      fields: columns,
-      length: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
-      sort: sort,
-    }).subscribe(response => {
-      this.dataSource = response.data;
-      this.length = response.recordsTotal;
-    });
+    this.sort.active = event.active;
+    this.sort.direction = event.direction;
+    this.draw();
   }
 
-  handleFilterEvent(filter: string) {
-    const columns = this.displayedColumns.map(column => ({
-      data: column,
-      sortable: true,
-      searchable: true,
-    }));
-    const sort: any[] = [];
+  draw() {
+    const request: ListInput = {
+      fields: this.displayedColumns.map(column => ({
+        data: column,
+        sortable: true,
+        searchable: true,
+      })),
+      sort: [],
+      length: this.paginator.pageSize,
+      offset: this.paginator.pageIndex * this.paginator.pageSize,
+    };
 
-    if (this.columnActive && this.columnDirection) {
-      sort.push({ column: this.columnActive, direction: this.columnDirection });
+    if (this.sort.active && this.sort.direction) {
+      const index = this.displayedColumns.findIndex(column => column === this.sort.active);
+      request.sort.push({ column: index, direction: this.sort.direction });
     }
 
-    const search = {
-      value: filter,
-      regex: true,
-    }
+    if (this.filter) request.search = { value: this.filter, regex: true };
 
-    this.productsService.list({
-      fields: columns,
-      length: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
-      sort: sort,
-      search: search,
-    }).subscribe(response => {
+    this.productsService.list(request).subscribe(response => {
       this.dataSource = response.data;
-      this.length = response.recordsTotal;
+      this.paginator.length = response.recordsTotal;
     });
   }
 }

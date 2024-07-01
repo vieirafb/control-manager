@@ -122,6 +122,7 @@ export class ProductsListComponent implements AfterViewInit {
     const row = this.dataSource.find(data => data._id === id);
     const dialogRef = this.dialog.open(ProductStockMovementDialogComponent, {
       width: '600px',
+      autoFocus: false,
       data: { productId: row._id },
     });
 

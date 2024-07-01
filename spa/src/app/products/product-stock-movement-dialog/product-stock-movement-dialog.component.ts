@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from '@angular/material/icon';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -16,6 +17,7 @@ import {
   selector: 'app-product-stock-movement-dialog',
   standalone: true,
   imports: [
+    MatIconModule,
     MatButtonModule,
     MatDialogTitle,
     MatDialogContent,

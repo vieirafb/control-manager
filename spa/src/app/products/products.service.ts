@@ -6,6 +6,8 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class ProductsService {
+  url: string = 'http://0.0.0.0:5002';
+
   constructor(
     private httpClient: HttpClient,
   ) {}
@@ -34,8 +36,41 @@ export class ProductsService {
       params = params.append(`${attr}[direction]`, sort.direction || 'asc');
     });
 
-    return this.httpClient.get<any>('http://0.0.0.0:5002/product', { params: params });
+    return this.httpClient.get<any>(`${this.url}/product`, { params: params });
   }
+
+  get(id: string) {
+    return this.httpClient.get<any>(`${this.url}/product/${id}`);
+  }
+
+  save(input: SaveInput) {
+    return input.id
+      ? this.update(input.id, input.name, input.type, input.price)
+      : this.store(input.name, input.type, input.price);
+  }
+
+  private store(name: string, type: string, price: number) {
+    return this.httpClient.post(`${this.url}/product/`, {
+      name: name,
+      type: type,
+      price: price,
+    });
+  }
+
+  private update(id: string, name: string, type: string, price: number) {
+    return this.httpClient.put(`${this.url}/product/${id}`, {
+      name: name,
+      type: type,
+      price: price,
+    });
+  }
+}
+
+export type SaveInput = {
+  id?: string,
+  name: string,
+  type: string,
+  price: number,
 }
 
 export type ListInput = {

@@ -34,7 +34,7 @@ export class ProductsListComponent implements AfterViewInit {
   dialog: MatDialog = inject(MatDialog);
   appService: AppService = inject(AppService);
 
-  displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock', 'actions'];
+  displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock', 'createdAt', 'actions'];
   dataSource: any[] = [];
   pageSizeOptions: number[] = [10, 25, 50, 100];
   pageSize: number = 10;
@@ -79,17 +79,23 @@ export class ProductsListComponent implements AfterViewInit {
     if (this.filter) request.search = { value: this.filter, regex: true };
 
     this.productsService.list(request).subscribe(response => {
+      response.data.map((data: any) => {
+        data.createdAt = new Date(data.createdAt);
+        data.updatedAt = new Date(data.updatedAt);
+        return data;
+      });
+
       this.dataSource = response.data;
       this.paginator.length = response.recordsTotal;
     });
   }
 
   onAdd() {
-    this.router.navigate(['new'], {relativeTo: this.route});
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   onEdit(id: string) {
-    this.router.navigate([`edit/${id}`], {relativeTo: this.route});
+    this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 
   onDelete(id: string) {

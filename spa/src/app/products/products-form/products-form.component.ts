@@ -33,6 +33,9 @@ export class ProductsFormComponent {
 
   constructor() {
     const productId = this.route.snapshot.params['id'];
+
+    if (!productId) return;
+
     this.productsService.get(productId).subscribe({
       next: resp => {
         this.product = resp.data;

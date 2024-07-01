@@ -35,12 +35,14 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" aria-label="Editar produto" (click)="onEdit(element._id)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" aria-label="Deletar produto">
-          <mat-icon>delete</mat-icon>
-        </button>
+        <div class="float-end">
+          <button mat-icon-button color="primary" aria-label="Editar produto" (click)="onEdit(element._id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" aria-label="Deletar produto" (click)="onDelete(element._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </td>
     </ng-container>
 

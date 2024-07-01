@@ -7,6 +7,7 @@ services:
       - "${API_PORT:-5002}:5002"
     volumes:
       - ./api:/api
+      - ./.env:/api/.env
     networks:
       - default
     depends_on:
@@ -31,8 +32,6 @@ services:
       - "${SPA_PORT:-4200}:4200"
     volumes:
       - ./spa:/spa
-    networks:
-      - default
     depends_on:
       - api
 

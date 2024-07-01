@@ -12,4 +12,4 @@ app.use(cors());
 app.use(express.json());
 app.use(Routes);
 app.use(ErrorHandler);
-app.listen(5002, () => console.log('Servidor iniciado na porta 5002!'));
+app.listen(5002, () => console.log(`Servidor iniciado na porta ${process.env.API_PORT}!`));

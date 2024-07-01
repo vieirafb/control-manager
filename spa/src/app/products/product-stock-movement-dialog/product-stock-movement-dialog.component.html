@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>Registrar Movimentação</h2>
+<mat-dialog-content class="p-3">
+  <app-product-stock-movement-form [productId]="data.productId" (formSent)="formSent($event)"></app-product-stock-movement-form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button color="primary" [mat-dialog-close]="false">Voltar</button>
+</mat-dialog-actions>

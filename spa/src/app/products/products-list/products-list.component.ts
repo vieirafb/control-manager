@@ -13,6 +13,9 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDeleteDialogComponent } from "../product-delete-dialog/product-delete-dialog.component";
 import { AppService } from "../../app.service";
+import {
+  ProductStockMovementDialogComponent
+} from "../product-stock-movement-dialog/product-stock-movement-dialog.component";
 
 @Component({
   selector: 'app-products-list',
@@ -106,6 +109,18 @@ export class ProductsListComponent implements AfterViewInit {
           error: info => this.appService.notify(info.error.message || 'Houve algum erro inesperado!'),
         })
       }
+    });
+  }
+
+  onAddMovement(id: string) {
+    const row = this.dataSource.find(data => data._id === id);
+    const dialogRef = this.dialog.open(ProductStockMovementDialogComponent, {
+      width: '600px',
+      data: { productId: row._id },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.draw();
     });
   }
 }

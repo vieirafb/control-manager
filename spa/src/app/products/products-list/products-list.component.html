@@ -42,6 +42,9 @@
           <button mat-icon-button color="warn" aria-label="Deletar produto" (click)="onDelete(element._id)">
             <mat-icon>delete</mat-icon>
           </button>
+          <button mat-icon-button aria-label="Registrar movimentação de estoque" (click)="onAddMovement(element._id)">
+            <mat-icon>inventory2</mat-icon>
+          </button>
         </div>
       </td>
     </ng-container>

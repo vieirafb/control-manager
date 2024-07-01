@@ -68,6 +68,21 @@ export class ProductsService {
   delete(id: string) {
     return this.httpClient.delete(`${this.url}/product/${id}`);
   }
+
+  addStockMovement(
+    productId: string,
+    movementType: string,
+    quantity: number,
+    entryDatetime: string,
+    comments: string,
+  ) {
+    return this.httpClient.post(`${this.url}/product/${productId}/stock-movement`, {
+      movementType: movementType,
+      quantity: quantity,
+      entryDatetime: entryDatetime,
+      comments: comments,
+    });
+  }
 }
 
 export type SaveInput = {

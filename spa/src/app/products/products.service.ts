@@ -64,6 +64,10 @@ export class ProductsService {
       price: price,
     });
   }
+
+  delete(id: string) {
+    return this.httpClient.delete(`${this.url}/product/${id}`);
+  }
 }
 
 export type SaveInput = {

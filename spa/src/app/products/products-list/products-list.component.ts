@@ -10,13 +10,16 @@ import { FormsModule } from "@angular/forms";
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, ActivatedRoute } from "@angular/router";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProductDeleteDialogComponent } from "../product-delete-dialog/product-delete-dialog.component";
+import { AppService } from "../../app.service";
 
 @Component({
   selector: 'app-products-list',
   standalone: true,
   imports: [
     CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule, FormsModule,
-    MatIconModule, MatButtonModule
+    MatIconModule, MatButtonModule, MatDialogModule
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css'
@@ -25,6 +28,8 @@ export class ProductsListComponent implements AfterViewInit {
   productsService: ProductsService = inject(ProductsService);
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
+  dialog: MatDialog = inject(MatDialog);
+  appService: AppService = inject(AppService);
 
   displayedColumns: string[] = ['_id', 'name', 'type', 'price', 'stock', 'actions'];
   dataSource: any[] = [];
@@ -82,5 +87,25 @@ export class ProductsListComponent implements AfterViewInit {
 
   onEdit(id: string) {
     this.router.navigate([`edit/${id}`], {relativeTo: this.route});
+  }
+
+  onDelete(id: string) {
+    const row = this.dataSource.find(data => data._id === id);
+    const dialogRef = this.dialog.open(ProductDeleteDialogComponent, {
+      width: '300px',
+      data: { name: row.name },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productsService.delete(row._id).subscribe({
+          next: resp => {
+            this.appService.notify('Concluído');
+            this.draw();
+          },
+          error: info => this.appService.notify(info.error.message || 'Houve algum erro inesperado!'),
+        })
+      }
+    });
   }
 }

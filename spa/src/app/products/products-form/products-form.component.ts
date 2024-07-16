@@ -54,7 +54,7 @@ export class ProductsFormComponent {
 
   submitApplication() {
     this.productsService.save({
-      id: this.product?.id ?? '',
+      id: this.product?._id ?? '',
       name: this.applyForm.value.name ?? '',
       type: this.applyForm.value.type ?? '',
       price: Number(this.applyForm.value.price) ?? 0,

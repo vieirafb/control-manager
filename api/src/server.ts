@@ -1,10 +1,10 @@
 import express from 'express';
-import Routes from "./http/routes";
-import connection from "./infra/databases/connection";
-import ErrorHandler from "./errors/ErrorHandler"
+import Routes from "./routes";
+import database from "./config/database";
+import ErrorHandler from "./common/errors/ErrorHandler"
 import cors from "cors"
 
-connection();
+database();
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import {celebrate, Joi, Segments} from 'celebrate';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 const list = celebrate(
     {
@@ -24,7 +24,7 @@ const list = celebrate(
             offset: Joi.number().integer().min(0).default(0),
         }),
     },
-    {abortEarly: false},
+    { abortEarly: false },
 );
 
 const show = celebrate(
@@ -33,7 +33,7 @@ const show = celebrate(
             id: Joi.string().length(24).regex(/[0-9a-f]/).required(),
         }),
     },
-    {abortEarly: false},
+    { abortEarly: false },
 );
 
 const store = celebrate(
@@ -44,7 +44,7 @@ const store = celebrate(
             price: Joi.number().precision(2).greater(0).required(),
         }),
     },
-    {abortEarly: false}
+    { abortEarly: false }
 );
 
 const update = celebrate(
@@ -58,7 +58,7 @@ const update = celebrate(
             id: Joi.string().length(24).regex(/[0-9a-f]/).required(),
         }
     },
-    {abortEarly: false}
+    { abortEarly: false }
 );
 
 const destroy = celebrate(
@@ -67,7 +67,7 @@ const destroy = celebrate(
             id: Joi.string().length(24).regex(/[0-9a-f]/).required(),
         }
     },
-    {abortEarly: false}
+    { abortEarly: false }
 );
 
 const stockMovement = celebrate(
@@ -82,7 +82,7 @@ const stockMovement = celebrate(
             id: Joi.string().length(24).regex(/[0-9a-f]/).required(),
         }
     },
-    {abortEarly: false}
+    { abortEarly: false }
 )
 
 export default {
